@@ -1,6 +1,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import LayoutProvider from "./layout-provider";
+import Providers from "./providers";
+import MantineProvider from "./mantine-provider";
+import NextThemeProvider from "./next-theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,9 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en-US" suppressHydrationWarning>
+      <head />
       <body className={inter.className}>
-        <LayoutProvider>{children}</LayoutProvider>
+        <NextThemeProvider>
+          <MantineProvider>
+            <Providers>{children}</Providers>
+          </MantineProvider>
+        </NextThemeProvider>
       </body>
     </html>
   );

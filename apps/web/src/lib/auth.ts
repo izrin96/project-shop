@@ -72,10 +72,10 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     jwt: async ({ token, user, account }) => {
-      if (account?.provider == "github") {
+      if (account?.provider != "credentials") {
         try {
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/github/callback?access_token=${account?.access_token}`
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/${account?.provider}/callback?access_token=${account?.access_token}`
           );
 
           const result = response?.data;
@@ -83,13 +83,11 @@ export const authOptions: NextAuthOptions = {
             token.jwt = result.jwt;
           }
         } catch {}
-      }
-      if (account?.provider == "credentials") {
+      } else {
         if (user.jwt) {
           token.jwt = user.jwt;
         }
       }
-
       return token;
     },
   },
